@@ -145,7 +145,7 @@ async def message(ctx, user:nextcord.Member=SlashOption(description='User who yo
   if text:
     text_success = await user.send(text)
     if text_success:
-      await ctx.send(f'Succesfully sent the **text** message to the **{user}** \n Text message: {text}')
+      await ctx.send(f'Successfully sent the **text** message to the **{user}** \n Text message: {text}')
   if embed:
     json_object = json.loads(embed)
     title = json_object["title"]
@@ -159,7 +159,7 @@ async def message(ctx, user:nextcord.Member=SlashOption(description='User who yo
     embed2.set_footer(text=footer)
     embed_success = await user.send(embed=embed2)
     if embed_success:
-      await ctx.send(f'Succesfully sent the **embed** message to the **{user}** \n embed id: {embed2}')
+      await ctx.send(f'Successfully sent the **embed** message to the **{user}** \n embed id: {embed2}')
 
 
 @bot.event
