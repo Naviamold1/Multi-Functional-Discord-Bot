@@ -13,10 +13,17 @@ git clone https://github.com/Naviamold1/Multi-Functional-Discord-Bot.git
 
 ## Usage
 
-rename .env.template to .env then open it and fill it in
+rename [.env.template](https://github.com/Naviamold1/Multi-Functional-Discord-Bot/blob/main/.env.template) to .env then open it and fill it in
 
 ```sh
 cd Multi-Functional-Discord-Bot
+```
+
+```sh
+pip install -r requirements.txt
+```
+
+```sh
 python main.py
 ```
 
@@ -24,8 +31,8 @@ python main.py
 
 👤 **Naviamold**
 
-* Twitter: [@naviamold](https://twitter.com/naviamold)
-* Github: [@Naviamold1](https://github.com/Naviamold1)
+- Twitter: [@naviamold](https://twitter.com/naviamold)
+- Github: [@Naviamold1](https://github.com/Naviamold1)
 
 ## 🤝 Contributing
 
@@ -37,5 +44,6 @@ Feel free to check [issues page](https://github.com/Naviamold1/Multi-Functional-
 
 Give a ⭐️ if this project helped you!
 
-***
+---
+
 _This README was generated with ❤️ by [readme-md-generator](https://github.com/kefranabg/readme-md-generator)_
