@@ -62,7 +62,7 @@ class Cooking(commands.Cog):
             if name:
                 for item in r.json()["results"]:
                     embed.add_field(
-                        name=item["title"], value=f'do: **/search id:{item["id"]}** for more info about this dish.', inline=True)
+                        name=item["title"], value=f'do: **/search-recipe id:{item["id"]}** for more info about this dish.', inline=True)
             else:
                 for item in result["extendedIngredients"]:
                     embed.add_field(
