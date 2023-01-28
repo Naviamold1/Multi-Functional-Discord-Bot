@@ -21,7 +21,7 @@ class Cooking(commands.Cog):
 
     @app_commands.command(name='random-recipe', description="Get a random recipe")
     @app_commands.describe(tag='Select the type of recipe you want to get')
-    async def randomrecipe(self, interaction: Interaction, tag:  Optional[str]):
+    async def randomrecipe(self, interaction: Interaction, tag: Optional[str]):
         url = f'https://api.spoonacular.com/recipes/random?apiKey={os.getenv("SPOONACULAR_SECRET")}'
         if tag is not None:
             url += f'&tags={tag}'
@@ -57,7 +57,7 @@ class Cooking(commands.Cog):
             recipe_link = result["spoonacularSourceUrl"]
             scores_result1 = result["aggregateLikes"]
             get_id = result["id"]
-            embed = discord.Embed(title=f'Search Results for {name}' if name else title_name, description=f'{scores_result1} Person liked this recipe 😀' if id else "" ,color=random.choice(
+            embed = discord.Embed(title=f'Search Results for {name}' if name else title_name, description=f'{scores_result1} Person liked this recipe 😀' if id else "", color=random.choice(
                 colors), url=recipe_link)
             if name:
                 for item in r.json()["results"]:

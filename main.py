@@ -16,7 +16,7 @@ class MainBot(commands.Bot):
                          help_command=PrettyHelp(), intents=discord.Intents.all())
 
     async def setup_hook(self) -> None:
-        cogs = ["cogs.info", "cogs.cooking", "cogs.util"]
+        cogs = ["cogs.info", "cogs.cooking", "cogs.util", "cogs.trivia"]
         for ext in cogs:
             await self.load_extension(ext)
 
