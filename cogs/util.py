@@ -1,7 +1,8 @@
+import os
 import random
 import urllib
 from typing import Optional
-import os
+
 import discord
 import requests
 from discord import Interaction, app_commands
@@ -13,6 +14,7 @@ colors = [0xFFE4E1, 0x00FF7F, 0xD8BFD8, 0xDC143C, 0xFF4500, 0xDEB887, 0xADFF2F, 
 
 load_dotenv
 
+
 class Util(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
@@ -21,7 +23,7 @@ class Util(commands.Cog):
     @app_commands.describe(location="Enter the name of the location for which you would like to view the weather ")
     async def weather(self, interaction: Interaction, location: str):
         r = requests.get(
-            f'https://api.openweathermap.org/data/2.5/weather?q={location}&appid={os.getenv}')
+            f'https://api.openweathermap.org/data/2.5/weather?q={location}&appid={os.getenv("WEATHER_SECRET")}&units=metric')
         if r.status_code == 200:
             weather_data = r.json()
             weather_description = weather_data["weather"][0]["description"]
@@ -88,7 +90,8 @@ class Util(commands.Cog):
         else:
             embed = discord.Embed(
                 title=f'Oops an Error Occured', description=f'{error}', color=random.choice(colors))
-            embed.set_image(url="https://www.freeiconspng.com/thumbs/error-icon/error-icon-32.png")
+            embed.set_image(
+                url="https://www.freeiconspng.com/thumbs/error-icon/error-icon-32.png")
             await interaction.response.send_message(embed=embed, ephemeral=True)
 
     @app_commands.command(name='fact', description='Get a random number or a random fact')

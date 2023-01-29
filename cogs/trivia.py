@@ -44,10 +44,14 @@ class Trivia(commands.Cog):
             data = json.load(file)
         if continent is not None:
             data = [cont for cont in data if cont["continent"] == continent.value]
-      
+        previously_selected = []
         for _ in range(rounds):
-
+            if len(previously_selected) == len(data):
+                previously_selected = []
             a = random.choice(data)
+            while a["country"] in previously_selected:
+                a = random.choice(data)
+            previously_selected.append(a["country"])
             print(os.path.split(a["image"])[1])
             embed = Embed(title=f'Round {round_num} of {rounds}',
                           description=f'Time limit: <t:{int(tm.time())+time}:R>', timestamp=discord.utils.utcnow(), color=random.choice(colors))
