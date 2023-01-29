@@ -26,7 +26,7 @@ class Trivia(commands.Cog):
         continent=[
             Choice(name="Europe", value="Europe"),
             Choice(name="Asia", value="Asia"),
-            Choice(name="Americas", value="Asia"),
+            Choice(name="Americas", value="Americas"),
             Choice(name="Africa", value='Africa'),
             Choice(name="Oceania", value="Oceania")
         ]
@@ -44,12 +44,9 @@ class Trivia(commands.Cog):
             data = json.load(file)
         if continent is not None:
             data = [cont for cont in data if cont["continent"] == continent.value]
-
+      
         for _ in range(rounds):
-            for end in self.trivia_end:
-                if end == interaction.guild_id:
-                    return
-                    
+
             a = random.choice(data)
             print(os.path.split(a["image"])[1])
             embed = Embed(title=f'Round {round_num} of {rounds}',
@@ -68,6 +65,23 @@ class Trivia(commands.Cog):
                 msg = msg.lower()
                 js = js.replace(" ", '')
                 msg = msg.replace(" ", '')
+                js = js.replace("-", '')
+                msg = msg.replace("-", '')
+                ali = a.get("alias", None)
+                if ali:
+                    if type(ali) == list:
+                        for i in ali:
+                            i = i.lower()
+                            i = i.replace(" ", '')
+                            i = i.replace("-", '')
+                            if msg == i:
+                                return True
+                    else:
+                        ali = ali.lower()
+                        ali = ali.replace(" ", '')
+                        ali = ali.replace("-", '')
+                        if msg == ali:
+                            return True
                 return msg == js
             try:
                 res = await self.bot.wait_for('message', timeout=time, check=check)
@@ -75,7 +89,11 @@ class Trivia(commands.Cog):
                 await interaction.followup.send(f"No one gave the correct answer. It was **{a['country']}**")
             else:
                 users.append(f'{res.author.name}#{res.author.discriminator}')
-                await interaction.followup.send('Correct <@{.author.id}> it was **{country}** !'.format(res, country=a["country"]))
+                message = await res.channel.fetch_message(res.id)
+                await message.add_reaction("✅")
+            if interaction.guild_id in self.trivia_end:
+                self.trivia_end.remove(interaction.guild_id)
+                return
             round_num += 1
 
         score_embed = Embed(title="Final Scores!",
@@ -90,10 +108,12 @@ class Trivia(commands.Cog):
     @app_commands.command(name="trivia-end", description="Ends Ongoing Trivia")
     async def triviaend(self, interaction: Interaction):
         if interaction.guild_id in self.trivia_in_progeress:
-            self.trivia_end.append(interaction.guild_id)
+            if interaction.guild_id not in self.trivia_end:
+                self.trivia_end.append(interaction.guild_id)
+                self.trivia_in_progeress.remove(interaction.guild_id)
             await interaction.response.send_message("Trivia match ended.")
         else:
-            await interaction.response.send_message("No ongoing trivia match to end.")
+            await interaction.response.send_message("No trivia match is currently in progress.")
 
 
 async def setup(bot: commands.Bot):
