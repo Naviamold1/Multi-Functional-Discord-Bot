@@ -15,11 +15,11 @@ colors = [0xFFE4E1, 0x00FF7F, 0xD8BFD8, 0xDC143C, 0xFF4500, 0xDEB887, 0xADFF2F, 
           0x4682B4, 0x006400, 0x808080, 0xA0522D, 0xF08080, 0xC71585, 0xFFB6C1, 0x00CED1]
 
 
-class Cooking(commands.Cog):
+class Cooking(commands.GroupCog, name="recipe"):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
 
-    @app_commands.command(name='random-recipe', description="Get a random recipe")
+    @app_commands.command(name='random', description="Get a random recipe")
     @app_commands.describe(tag='Select the type of recipe you want to get')
     async def randomrecipe(self, interaction: Interaction, tag: Optional[str]):
         url = f'https://api.spoonacular.com/recipes/random?apiKey={os.getenv("SPOONACULAR_SECRET")}'
@@ -41,7 +41,7 @@ class Cooking(commands.Cog):
         embed.set_footer(text=f'Product ID: {get_id}')
         await interaction.response.send_message(embed=embed)
 
-    @app_commands.command(name='search-recipe', description='Search for a specific dish')
+    @app_commands.command(name='search', description='Search for a specific dish')
     @app_commands.describe(name='Enter the dish name', id="Enter the dish ID", tag="Select the type of recipe you want to get")
     async def searchforrecipe(self, interaction: Interaction, name: Optional[str], id: Optional[str], tag:  Optional[str]):
         url = f'https://api.spoonacular.com/recipes/complexSearch?apiKey={os.getenv("SPOONACULAR_SECRET")}&addRecipeInformation=True'
