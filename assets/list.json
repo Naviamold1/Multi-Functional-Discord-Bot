@@ -122,7 +122,8 @@
   {
     "country": "Bolivia",
     "continent": "Americas",
-    "image": "assets\\flags/Bolivia.png"
+    "image": "assets\\flags/Bolivia.png",
+    "map": "https://github.com/djaiss/mapsicon/blob/master/all/bo/256.png?raw=true"
   },
   {
     "country": "Bosnia and Herzegovina",
@@ -146,7 +147,8 @@
   {
     "country": "Brunei",
     "continent": "Asia",
-    "image": "assets\\flags/Brunei.png"
+    "image": "assets\\flags/Brunei.png",
+    "map": "https://github.com/djaiss/mapsicon/blob/master/all/bn/256.png?raw=true"
   },
   {
     "country": "Bulgaria",
@@ -187,13 +189,15 @@
   {
     "country": "Cape Verde",
     "continent": "Africa",
-    "image": "assets\\flags/CapeVerde.png"
+    "image": "assets\\flags/CapeVerde.png",
+    "map": "https://github.com/djaiss/mapsicon/blob/master/all/cv/256.png?raw=true"
   },
   {
     "country": "CentralAfricanRepublic",
     "continent": "Africa",
     "image": "assets\\flags/CentralAfricanRepublic.png",
-    "alias": "CAR"
+    "alias": "CAR",
+    "map": "https://github.com/djaiss/mapsicon/blob/master/all/cf/256.png?raw=true"
   },
   {
     "country": "Chad",
@@ -464,7 +468,12 @@
     "image": "assets\\flags/Indonesia.png",
     "map": "https://github.com/djaiss/mapsicon/blob/master/all/id/256.png?raw=true"
   },
-  { "country": "Iran", "continent": "Asia", "image": "assets\\flags/Iran.png" },
+  {
+    "country": "Iran",
+    "continent": "Asia",
+    "image": "assets\\flags/Iran.png",
+    "map": "https://github.com/djaiss/mapsicon/blob/master/all/ir/256.png?raw=true"
+  },
   {
     "country": "Iraq",
     "continent": "Asia",
@@ -493,7 +502,8 @@
     "country": "Ivory Coast",
     "continent": "Africa",
     "image": "assets\\flags/IvoryCoast.png",
-    "alias": "cote d'ivoire"
+    "alias": "cote d'ivoire",
+    "map": "https://github.com/djaiss/mapsicon/blob/master/all/ci/256.png?raw=true"
   },
   {
     "country": "Jamaica",
@@ -543,7 +553,12 @@
     "image": "assets\\flags/Kyrgyzstan.png",
     "map": "https://github.com/djaiss/mapsicon/blob/master/all/kg/256.png?raw=true"
   },
-  { "country": "Laos", "continent": "Asia", "image": "assets\\flags/Laos.png" },
+  {
+    "country": "Laos",
+    "continent": "Asia",
+    "image": "assets\\flags/Laos.png",
+    "map": "https://github.com/djaiss/mapsicon/blob/master/all/la/256.png?raw=true"
+  },
   {
     "country": "Latvia",
     "continent": "Europe",
@@ -631,7 +646,8 @@
   {
     "country": "Marshall Islands",
     "continent": "Oceania",
-    "image": "assets\\flags/MarshallIslands.png"
+    "image": "assets\\flags/MarshallIslands.png",
+    "map": "https://media.discordapp.net/attachments/654748925672161300/1078023901042442400/vector-map-marshall-islands-isolated-vector-illustration-black-on-white-background-eps-10-illustration-2BW5JX0.jpg.png?width=464&height=496"
   },
   {
     "country": "Mauritania",
@@ -654,12 +670,14 @@
   {
     "country": "Micronesia",
     "continent": "Oceania",
-    "image": "assets\\flags/Micronesia.png"
+    "image": "assets\\flags/Micronesia.png",
+    "map": "https://media.discordapp.net/attachments/654748925672161300/1078024371341381713/image.png?width=497&height=496"
   },
   {
     "country": "Moldova",
     "continent": "Europe",
-    "image": "assets\\flags/Moldova.png"
+    "image": "assets\\flags/Moldova.png",
+    "map": "https://github.com/djaiss/mapsicon/blob/master/all/md/256.png?raw=true"
   },
   {
     "country": "Monaco",
@@ -749,7 +767,8 @@
     "country": "North Korea",
     "continent": "Asia",
     "image": "assets\\flags/NorthKorea.png",
-    "alias": "DRPK"
+    "alias": "DRPK",
+    "map": "https://github.com/djaiss/mapsicon/blob/master/all/kp/256.png?raw=true"
   },
   {
     "country": "North Macedonia",
@@ -839,7 +858,8 @@
   {
     "country": "Russia",
     "continent": "Europe",
-    "image": "assets\\flags/Russia.png"
+    "image": "assets\\flags/Russia.png",
+    "map": "https://github.com/djaiss/mapsicon/blob/master/all/ru/256.png?raw=true"
   },
   {
     "country": "Rwanda",
@@ -952,7 +972,8 @@
   {
     "country": "South Korea",
     "continent": "Asia",
-    "image": "assets\\flags/SouthKorea.png"
+    "image": "assets\\flags/SouthKorea.png",
+    "map": "https://github.com/djaiss/mapsicon/blob/master/all/kr/256.png?raw=true"
   },
   {
     "country": "South Sudan",
@@ -999,7 +1020,8 @@
   {
     "country": "Syria",
     "continent": "Asia",
-    "image": "assets\\flags/Syria.png"
+    "image": "assets\\flags/Syria.png",
+    "map": "https://github.com/djaiss/mapsicon/blob/master/all/sy/256.png?raw=true"
   },
   {
     "country": "Tajikistan",
@@ -1010,12 +1032,14 @@
   {
     "country": "Taiwan",
     "continent": "Asia",
-    "image": "assets\\flags/Taiwan.png"
+    "image": "assets\\flags/Taiwan.png",
+    "map": "https://github.com/djaiss/mapsicon/blob/master/all/tw/256.png?raw=true"
   },
   {
     "country": "Tanzania",
     "continent": "Africa",
-    "image": "assets\\flags/Tanzania.png"
+    "image": "assets\\flags/Tanzania.png",
+    "map": "https://github.com/djaiss/mapsicon/blob/master/all/tz/256.png?raw=true"
   },
   {
     "country": "Thailand",
@@ -1070,7 +1094,8 @@
   {
     "country": "Tuvalu",
     "continent": "Oceania",
-    "image": "assets\\flags/Tuvalu.png"
+    "image": "assets\\flags/Tuvalu.png",
+    "map": "https://media.discordapp.net/attachments/654748925672161300/1078026141153108008/tuvalu-black-silhouette-map-tuvalu-logo_652297-1283.png?width=496&height=496"
   },
   {
     "country": "Uganda",
@@ -1127,17 +1152,20 @@
     "country": "Vatican City",
     "continent": "Europe",
     "image": "assets\\flags/VaticanCity.png",
-    "alias": "Vatican"
+    "alias": "Vatican",
+    "map": "https://github.com/djaiss/mapsicon/blob/master/all/va/256.png?raw=true"
   },
   {
     "country": "Venezuela",
     "continent": "Americas",
-    "image": "assets\\flags/Venezuela.png"
+    "image": "assets\\flags/Venezuela.png",
+    "map": "https://github.com/djaiss/mapsicon/blob/master/all/ve/256.png?raw=true"
   },
   {
     "country": "Vietnam",
     "continent": "Asia",
-    "image": "assets\\flags/Vietnam.png"
+    "image": "assets\\flags/Vietnam.png",
+    "map": "https://github.com/djaiss/mapsicon/blob/master/all/vn/256.png?raw=true"
   },
   {
     "country": "Yemen",
