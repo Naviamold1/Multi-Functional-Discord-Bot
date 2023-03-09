@@ -16,12 +16,12 @@ class MainBot(commands.Bot):
                          help_command=PrettyHelp(), intents=discord.Intents.all())
 
     async def setup_hook(self) -> None:
-        try:
-            cogs = ["cogs.info", "cogs.cooking", "cogs.util", "cogs.trivia", 'cogs.chess', 'cogs.troll']
-            for ext in cogs:
-                await self.load_extension(ext)
-        except discord.ext.commands.errors.ExtensionNotFound:
-            pass
+        cogs = ["cogs.info", "cogs.cooking",
+                "cogs.util", "cogs.trivia", 'cogs.chess']
+        for ext in cogs:
+            await self.load_extension(ext)
+        if os.path.exists(r"cogs\troll.py"):
+            await self.load_extension("cogs.troll")
 
     async def on_ready(self):
         await self.change_presence(activity=discord.Activity(name='Naviamold!', type=discord.ActivityType.watching))
