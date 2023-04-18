@@ -8,7 +8,9 @@ class Info(commands.Cog):
 
     @app_commands.command(name="ping", description="Get the bots latency")
     async def ping(self, interaction: Interaction):
-        await interaction.response.send_message(f'Pong: {round (self.bot.latency * 1000)} ms')
+        await interaction.response.send_message(
+            f"Pong: {round (self.bot.latency * 1000)} ms"
+        )
 
 
 async def setup(bot: commands.Bot):

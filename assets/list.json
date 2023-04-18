@@ -193,7 +193,7 @@
     "map": "https://github.com/djaiss/mapsicon/blob/master/all/cv/256.png?raw=true"
   },
   {
-    "country": "CentralAfricanRepublic",
+    "country": "Central African Republic",
     "continent": "Africa",
     "image": "assets\\flags/CentralAfricanRepublic.png",
     "alias": "CAR",
@@ -237,7 +237,7 @@
     "map": "https://github.com/djaiss/mapsicon/blob/master/all/cg/256.png?raw=true"
   },
   {
-    "country": "DemocraticRepublicoftheCongo",
+    "country": "Democratic Republic of the Congo",
     "continent": "Africa",
     "image": "assets\\flags/DemocraticRepublicoftheCongo.png",
     "alias": "DRC",
@@ -865,7 +865,7 @@
     "country": "Rwanda",
     "continent": "Africa",
     "image": "assets\\flags/Rwanda.png",
-    "map": "https://github.com/djaiss/mapsicon/blob/master/all/rw/256.png?raw=true"
+    "map": "https://github.com/Naviamold1/mapsicon/blob/master/all/rw/256.png?raw=true"
   },
   {
     "country": "Saint Kitts and Nevis",
@@ -997,7 +997,7 @@
     "country": "Sudan",
     "continent": "Africa",
     "image": "assets\\flags/Sudan.png",
-    "map": "https://github.com/djaiss/mapsicon/blob/master/all/sd/256.png?raw=true"
+    "map": "https://github.com/Naviamold1/mapsicon/blob/master/all/sd/256.png?raw=true"
   },
   {
     "country": "Suriname",
