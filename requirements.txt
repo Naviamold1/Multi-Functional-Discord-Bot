@@ -2,7 +2,7 @@
 
 aiohttp
 chess.com==2.0.6
-discord.py==2.2.2
+discord.py==2.2.3
 python-dotenv==1.0.0
 python-lichess==0.10
 requests
