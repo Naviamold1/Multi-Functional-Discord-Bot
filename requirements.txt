@@ -6,4 +6,4 @@ discord.py==2.2.3
 python-dotenv==1.0.0
 python-lichess==0.10
 requests
-discord-pretty-help==2.0.4
+discord-pretty-help==2.0.5
