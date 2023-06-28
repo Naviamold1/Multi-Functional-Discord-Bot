@@ -116,7 +116,7 @@ class Cooking(commands.GroupCog, name="recipe"):
                 if id
                 else f"Search Results for **{name}**:",
                 description="Check if you are typing it correctly.",
-                color=random.choice(colors),
+                color=discord.Color.red(),
             )
             embed.set_image(
                 url="https://cdn-icons-png.flaticon.com/512/6134/6134065.png"

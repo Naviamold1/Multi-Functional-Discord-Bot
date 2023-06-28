@@ -17,14 +17,19 @@ rename [.env.template](https://github.com/Naviamold1/Multi-Functional-Discord-Bo
 
 ```sh
 cd Multi-Functional-Discord-Bot
-```
-
-```sh
 pip install -r requirements.txt
+python main.py
 ```
 
+### Using [Pipenv](https://pipenv.pypa.io/en/latest/installation/#preferred-installation-of-pipenv)
+
+rename [.env.template](https://github.com/Naviamold1/Multi-Functional-Discord-Bot/blob/main/.env.template) to .env then open it and fill it in
+
 ```sh
-python main.py
+cd Multi-Functional-Discord-Bot
+pipenv shell
+pipenv install
+python run main.py
 ```
 
 ## Author

@@ -9,25 +9,6 @@ from discord import Interaction, app_commands
 from discord.ext import commands
 from dotenv import load_dotenv
 
-colors = [
-    0xFFE4E1,
-    0x00FF7F,
-    0xD8BFD8,
-    0xDC143C,
-    0xFF4500,
-    0xDEB887,
-    0xADFF2F,
-    0x800000,
-    0x4682B4,
-    0x006400,
-    0x808080,
-    0xA0522D,
-    0xF08080,
-    0xC71585,
-    0xFFB6C1,
-    0x00CED1,
-]
-
 load_dotenv()
 
 
@@ -58,7 +39,7 @@ class Util(commands.Cog):
             weather_icon = weather_data["weather"][0]["icon"]
             weather_icon_url = f"http://{weather_icon}.png"
             embed = discord.Embed(
-                title=f"Weather for {location}", color=random.choice(colors)
+                title=f"Weather for {location}", color=discord.Color.blue()
             )
             embed.add_field(name="Description", value=weather_description, inline=True)
             embed.add_field(name="Temperature", value=f"{weather_temp}°C", inline=True)
@@ -75,7 +56,7 @@ class Util(commands.Cog):
             embed.set_image(url=weather_icon_url)
             await interaction.response.send_message(embed=embed)
         else:
-            await interaction.response.send_message("Invalid Location")
+            await interaction.response.send_message("Invalid Location", ephemeral=True)
 
     @app_commands.command(name="shorten", description="Shorten a url")
     @app_commands.describe(url="Enter the url you would like to shorten")
@@ -86,7 +67,7 @@ class Util(commands.Cog):
         if alias:
             site += f"&name={alias}"
         r = requests.get(site)
-        res = r.json()
+        res = r.json()["url"]
         status_messages = {
             1: "The shortened link comes from the domain that shortens the link, i.e. the link has already been shortened",
             2: "The entered link is not a link",
@@ -98,25 +79,23 @@ class Util(commands.Cog):
             8: "You have reached your monthly link limit. You can upgrade your subscription plan to add more links.",
         }
 
-        status = res["url"]["status"]
-
-        error = status_messages.get(int(status), "Invalid status")
-        if not status_messages[7]:
+        error = status_messages.get(int(res["status"]), "Invalid status")
+        if status_messages[7]:
             embed = discord.Embed(
-                title=f'Shortened URL for {res["fullLink"]}',
-                description=f'link: {res["shortLink"]}',
-                color=random.choice(colors),
-                url=res["shortLink"],
+                title=res["title"], color=discord.Color.green(), url=res["shortLink"]
             )
-            await interaction.response.send_message(embed=embed)
+            embed.add_field(name="Shortened Link", value=res["shortLink"], inline=False)
+            embed.add_field(name="Original Link", value=res["fullLink"], inline=False)
+            embed.set_footer(text=res["date"])
+            await interaction.response.send_message(content=res["shortLink"],embed=embed)
         else:
             embed = discord.Embed(
                 title=f"Oops an Error Occured",
-                description=f"{error}",
-                color=random.choice(colors),
+                description=error,
+                color=discord.Color.red(),
             )
             embed.set_image(
-                url="https://www.freeiconspng.com/thumbs/error-icon/error-icon-32.png"
+                url="https://media.discordapp.net/attachments/654748925672161300/1100876703078813767/error-icon-25266.png"
             )
             await interaction.response.send_message(embed=embed, ephemeral=True)
 
@@ -125,7 +104,7 @@ class Util(commands.Cog):
         r = requests.get("https://uselessfacts.jsph.pl/random.json?language=en")
         fact = r.json()["text"]
         embed = discord.Embed(
-            title="Random fact", description=f"{fact}", color=random.choice(colors)
+            title="Random fact", description=fact, color=discord.Color.yellow()
         )
         await interaction.response.send_message(embed=embed)
 

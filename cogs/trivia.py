@@ -66,12 +66,6 @@ class Btn(discord.ui.View):
         self.answer = answer
         self.message = None
 
-        # for item in self.choices:
-        #     for i in item:
-        #         self.add_item(CustomButton(label=i))
-        # view = CustomButton(label=self.answer)
-        # self.add_item(view)
-
         buttons = []
         for item in self.choices:
             for i in item:
@@ -158,23 +152,19 @@ class Trivia(commands.GroupCog, discord.ui.View, name="trivia"):
                 color=random.choice(colors),
             )
             embed.set_author(name="Guess the Flag!")
-            filee = discord.File(
-                rf"{country_choice['image']}",
-                filename=rf"{os.path.split(country_choice['image'])[1]}",
-            )
             embed.set_image(
-                url=rf'attachment://{os.path.split(country_choice["image"])[1]}'
+                url=country_choice["flag"]
             )
 
             if buttons:
                 view = Btn(other_choice, answer=country_choice["country"], timeout=time)
                 view.message = await interaction.followup.send(
-                    embed=embed, file=filee, view=view
+                    embed=embed, view=view
                 )
                 await view.wait()
 
             elif not buttons:
-                await interaction.followup.send(embed=embed, file=filee)
+                await interaction.followup.send(embed=embed)
 
                 def check(m):
                     js = str(country_choice["country"])
