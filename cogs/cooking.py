@@ -37,7 +37,7 @@ class Cooking(commands.GroupCog, name="recipe"):
 
     @app_commands.command(name="random", description="Get a random recipe")
     @app_commands.describe(tag="Select the type of recipe you want to get")
-    async def randomrecipe(self, interaction: Interaction, tag: Optional[str]):
+    async def random_recipe(self, interaction: Interaction, tag: Optional[str]):
         url = f'https://api.spoonacular.com/recipes/random?apiKey={os.getenv("SPOONACULAR_SECRET")}'
         if tag is not None:
             url += f"&tags={tag}"
@@ -66,7 +66,7 @@ class Cooking(commands.GroupCog, name="recipe"):
         id="Enter the dish ID",
         tag="Select the type of recipe you want to get",
     )
-    async def searchforrecipe(
+    async def search_recipe(
         self,
         interaction: Interaction,
         name: Optional[str],

@@ -1,36 +1,45 @@
 # Welcome to Multi-Functional-Bot 👋
 
+[![Python application](https://github.com/Naviamold1/Multi-Functional-Discord-Bot/actions/workflows/python-app.yml/badge.svg)](https://github.com/Naviamold1/Multi-Functional-Discord-Bot/actions/workflows/python-app.yml)
+[![CodeQL](https://github.com/Naviamold1/Multi-Functional-Discord-Bot/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/Naviamold1/Multi-Functional-Discord-Bot/actions/workflows/github-code-scanning/codeql)
+![GitHub issues](https://img.shields.io/github/issues/naviamold1/Multi-Functional-Discord-Bot)
+[![Black coding style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Twitter: naviamold](https://img.shields.io/twitter/follow/naviamold.svg?style=social)](https://twitter.com/naviamold)
 
-> Bot with variety of function like cooking, url shortening, weather telling and more
+> Bot with variety of function like cooking, geography trivia, url shortening, weather telling and more.
 
 ## Install
 
 ```sh
 git clone https://github.com/Naviamold1/Multi-Functional-Discord-Bot.git
+cd Multi-Functional-Discord-Bot
 ```
 
-## Usage
+`Rename .env.template file to .env then open it and fill it in.`
 
-rename [.env.template](https://github.com/Naviamold1/Multi-Functional-Discord-Bot/blob/main/.env.template) to .env then open it and fill it in
+After that continue with **EITHER** [Pip](#using-pip) **OR** [Pipenv](#using-pipenv) to install dependencies.
+
+### Using Pip
 
 ```sh
-cd Multi-Functional-Discord-Bot
 pip install -r requirements.txt
 python main.py
 ```
 
 ### Using [Pipenv](https://pipenv.pypa.io/en/latest/installation/#preferred-installation-of-pipenv)
 
-rename [.env.template](https://github.com/Naviamold1/Multi-Functional-Discord-Bot/blob/main/.env.template) to .env then open it and fill it in
-
 ```sh
-cd Multi-Functional-Discord-Bot
 pipenv shell
 pipenv install
 python run main.py
 ```
+
+## Usage
+
+After running and adding bot to your server simply type `/` to view and use command.
+
+To get a full list of commands you can type `/help` but make sure to select your bots command.
 
 ## Author
 

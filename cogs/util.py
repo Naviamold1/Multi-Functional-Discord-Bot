@@ -87,10 +87,12 @@ class Util(commands.Cog):
             embed.add_field(name="Shortened Link", value=res["shortLink"], inline=False)
             embed.add_field(name="Original Link", value=res["fullLink"], inline=False)
             embed.set_footer(text=res["date"])
-            await interaction.response.send_message(content=res["shortLink"],embed=embed)
+            await interaction.response.send_message(
+                content=res["shortLink"], embed=embed
+            )
         else:
             embed = discord.Embed(
-                title=f"Oops an Error Occured",
+                title=f"Oops an Error occurred",
                 description=error,
                 color=discord.Color.red(),
             )

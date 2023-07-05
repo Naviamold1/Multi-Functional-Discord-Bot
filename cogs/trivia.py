@@ -90,12 +90,12 @@ class Btn(discord.ui.View):
 class Trivia(commands.GroupCog, discord.ui.View, name="trivia"):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        self.trivia_in_progeress = []
+        self.trivia_in_progress = []
         self.trivia_end = []
 
     @app_commands.command(name="flags", description="Play flag trivia")
     @app_commands.describe(
-        rounds="Ammount of Rounds you want to play",
+        rounds="Amount of Rounds you want to play",
         time="Time limit of each round in seconds",
         continent="Only include a specific Continent",
         buttons="Include buttons for each answer aka easy mode",
@@ -117,13 +117,13 @@ class Trivia(commands.GroupCog, discord.ui.View, name="trivia"):
         time: int = 60,
         buttons: bool = False,
     ):
-        for server in self.trivia_in_progeress:
+        for server in self.trivia_in_progress:
             if server == interaction.guild_id:
                 return await interaction.response.send_message(
                     "A game is already in progress, please wait for it to finish.",
                     ephemeral=True,
                 )
-        self.trivia_in_progeress.append(interaction.guild_id)
+        self.trivia_in_progress.append(interaction.guild_id)
         round_num = 1
         global users
         users = []
@@ -227,11 +227,11 @@ class Trivia(commands.GroupCog, discord.ui.View, name="trivia"):
             text=f"Time taken: {round(end - start, 2)}s / {round((end - start)/60, 2)}min"
         )
         await interaction.followup.send(embed=score_embed)
-        self.trivia_in_progeress.remove(interaction.guild_id)
+        self.trivia_in_progress.remove(interaction.guild_id)
 
     @app_commands.command(name="maps", description="Play map trivia")
     @app_commands.describe(
-        rounds="Ammount of Rounds you want to play",
+        rounds="Amount of Rounds you want to play",
         time="Time limit of each round in seconds",
         continent="Only include a specific Continent",
         buttons="Include buttons for each answer aka easy mode",
@@ -253,13 +253,13 @@ class Trivia(commands.GroupCog, discord.ui.View, name="trivia"):
         time: int = 60,
         buttons: bool = False,
     ):
-        for server in self.trivia_in_progeress:
+        for server in self.trivia_in_progress:
             if server == interaction.guild_id:
                 return await interaction.response.send_message(
                     "A game is already in progress, please wait for it to finish.",
                     ephemeral=True,
                 )
-        self.trivia_in_progeress.append(interaction.guild_id)
+        self.trivia_in_progress.append(interaction.guild_id)
         round_num = 1
         global users
         users = []
@@ -357,14 +357,14 @@ class Trivia(commands.GroupCog, discord.ui.View, name="trivia"):
             text=f"Time taken: {round(end - start, 2)}s / {round((end - start)/60, 2)}min"
         )
         await interaction.followup.send(embed=score_embed)
-        self.trivia_in_progeress.remove(interaction.guild_id)
+        self.trivia_in_progress.remove(interaction.guild_id)
 
     @app_commands.command(name="end", description="Ends ongoing trivia")
     async def end(self, interaction: Interaction):
-        if interaction.guild_id in self.trivia_in_progeress:
+        if interaction.guild_id in self.trivia_in_progress:
             if interaction.guild_id not in self.trivia_end:
                 self.trivia_end.append(interaction.guild_id)
-                self.trivia_in_progeress.remove(interaction.guild_id)
+                self.trivia_in_progress.remove(interaction.guild_id)
             await interaction.response.send_message("Trivia match ended.")
         else:
             await interaction.response.send_message(

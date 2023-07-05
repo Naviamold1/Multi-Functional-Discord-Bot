@@ -62,7 +62,7 @@ class Chess(commands.GroupCog, name="chess"):
         )
 
     @app_commands.command(name="puzzle")
-    async def chstats(self, interaction: Interaction) -> None:
+    async def chpuzzle(self, interaction: Interaction) -> None:
         r = get_random_daily_puzzle()
         embed = discord.Embed(
             title=r.puzzle.title,
