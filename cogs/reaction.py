@@ -1,14 +1,37 @@
-import asyncpg
 import discord
 from asyncpg import exceptions as pgexec
 from discord import Interaction, app_commands
 from discord.ext import commands
 
+reaction_cache = {}
+
+
+async def get_channel_reactions(db, channel_id):
+    if channel_id in reaction_cache:
+        print("Cache Hit")
+        return reaction_cache[channel_id]
+    else:
+        res = await db.fetch(
+            "SELECT reaction, bots FROM Reaction WHERE channel_id = $1",
+            channel_id,
+        )
+        if res:
+            reaction = list(dict(res))
+            bots = list(dict(res).values())
+            reaction_cache[channel_id] = {"reaction": reaction, "bots": bots}
+            print("Cache Miss")
+            return reaction_cache[channel_id]
+
+
+def update_cache(channel_id):
+    print("Updating Cache")
+    reaction_cache.pop(channel_id)
+    print("Cache Updated")
+
 
 class Reaction(commands.GroupCog, name="reaction"):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        # self.db: asyncpg.pool.Pool = self.bot.db
 
     @app_commands.command(name="add")
     async def add(
@@ -30,13 +53,13 @@ class Reaction(commands.GroupCog, name="reaction"):
             guild_id,
             channel_id,
         )
-
         try:
             await self.bot.db.execute(
                 f"INSERT INTO Reaction(channel_id, reaction, bots) VALUES($1, E'{reaction}', $2)",
                 channel_id,
                 bots,
             )
+            update_cache(channel.id)
             await interaction.response.send_message(
                 f"Reactions have started for {channel.mention} with emoji {reaction} with bots {bots}"
             )
@@ -46,41 +69,56 @@ class Reaction(commands.GroupCog, name="reaction"):
                 ephemeral=True,
             )
 
-    # @TODO NONE OF THE REMOVE IS FUNCTIONAL RN
     @app_commands.command(name="remove")
-    async def remove(self, interaction: Interaction, channel: str, reaction: str):
-        await interaction.response.send_message("template command")
-
-    @remove.autocomplete("channel")
-    async def autocomplete_callback(
-        self, interaction: discord.Interaction, current: str
+    async def remove(
+        self, interaction: Interaction, channel: discord.TextChannel, reaction: str
     ):
-        # Do stuff with the "current" parameter, e.g. querying it search results...
-        res = await self.bot.db.fetch(
-            f"SELECT channel_id,reaction FROM Server INNER JOIN reaction on channel = channel_id WHERE server = 629021525978120212"
-        )
-        # Then return a list of app_commands.Choice
-        data = []
-        for channel, reaction in res:
-            print(channel)
-            data.append(app_commands.Choice(name=channel, value=channel))
-        return data
-        # name = self.bot.get_channel(interaction.channel_id)
-        return [
-            app_commands.Choice(name=channel, value=channel)
-            for channel, reaction in res
-        ]
-
-    # @TODO ADD CACHE
-    @commands.Cog.listener()
-    async def on_message(self, message: discord.Message):
-        res = await self.bot.db.fetch(
-            "SELECT reaction, bots FROM Reaction WHERE channel_id = $1",
-            message.channel.id,
+        res = await self.bot.db.execute(
+            "DELETE FROM Reaction WHERE channel_id = $1 AND reaction = $2",
+            channel.id,
+            reaction,
         )
         if res:
-            for reaction, bots in res:
-                await message.add_reaction(reaction)
+            update_cache(channel.id)
+
+            await interaction.response.send_message(
+                f"Reactions have been removed for {channel.mention} with emoji {reaction}"
+            )
+        else:
+            await interaction.response.send_message(
+                f"The channel {channel.mention} does not have reactions with emoji {reaction}",
+                ephemeral=True,
+            )
+
+    @app_commands.command(name="list")
+    async def list(self, interaction: Interaction, channel: discord.TextChannel):
+        res = await get_channel_reactions(self.bot.db, channel.id)
+        if res:
+            embed = discord.Embed(
+                title="List of Reactions",
+                description=f"List of Reactions for Channel {channel.mention}",
+                color=0xFF0000,
+            )
+            for reaction, bots in zip(res["reaction"], res["bots"]):
+                embed.add_field(name=reaction, value=f"Bots: {bots}", inline=False)
+            await interaction.response.send_message(embed=embed)
+        else:
+            await interaction.response.send_message(
+                f"The channel {channel.mention} does not have reactions",
+                ephemeral=True,
+            )
+
+    @commands.Cog.listener()
+    async def on_message(self, message: discord.Message):
+        res = await get_channel_reactions(self.bot.db, message.channel.id)
+        if res:
+            for reaction, bots in zip(res["reaction"], res["bots"]):
+                if not bots and message.author.bot:
+                    continue
+                try:
+                    await message.add_reaction(reaction)
+                except discord.errors.NotFound:
+                    pass
 
 
 async def setup(bot: commands.Bot):
