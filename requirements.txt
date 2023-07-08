@@ -5,7 +5,7 @@ async-timeout==4.0.2 ; python_version >= '3.6'
 asyncpg==0.28.0
 attrs==23.1.0 ; python_version >= '3.7'
 certifi==2023.5.7 ; python_version >= '3.6'
-charset-normalizer==2.0.12 ; python_full_version >= '3.5.0'
+charset-normalizer==3.2.0 ; python_full_version >= '3.5.0'
 chess.com==2.0.6
 discord-pretty-help==2.0.7
 discord.py==2.3.1
