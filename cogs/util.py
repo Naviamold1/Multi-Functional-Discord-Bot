@@ -12,7 +12,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-class Util(commands.Cog):
+class Util(commands.Cog, description='Utility commands'):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
 

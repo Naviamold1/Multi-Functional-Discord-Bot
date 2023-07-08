@@ -9,11 +9,12 @@ from discord.app_commands import Choice
 from discord.ext import commands
 
 
-class Chess(commands.GroupCog, name="chess"):
+class Chess(commands.GroupCog, name="chess", description="Command related to chess"):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
 
-    @app_commands.command(name="search")
+    @app_commands.command(name="search", description="Get players stats")
+    @app_commands.describe(platform="Platform to search", username="Username to search")
     @app_commands.choices(
         platform=[
             Choice(name="chess.com", value="chess.com"),
@@ -54,14 +55,7 @@ class Chess(commands.GroupCog, name="chess"):
         embed.set_footer(text=f"ID - {res['player_id']}")
         await interaction.response.send_message(embed=embed)
 
-    @app_commands.command(name="stats")
-    async def chstats(self, interaction: Interaction) -> None:
-        get_random_daily_puzzle()
-        await interaction.response.send_message(
-            "Hello from sub command 2", ephemeral=True
-        )
-
-    @app_commands.command(name="puzzle")
+    @app_commands.command(name="puzzle", description="Get a random daily puzzle")
     async def chpuzzle(self, interaction: Interaction) -> None:
         r = get_random_daily_puzzle()
         embed = discord.Embed(

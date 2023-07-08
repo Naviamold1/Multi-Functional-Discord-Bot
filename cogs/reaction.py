@@ -30,7 +30,7 @@ def update_cache(channel_id):
 
 
 class Reaction(
-    commands.GroupCog, name="reaction", description="Manage auto-reactions on messages"
+    commands.GroupCog, name="reaction", description="Manage auto-reactions"
 ):
     def __init__(self, bot: commands.Bot):
         self.bot = bot

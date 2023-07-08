@@ -31,7 +31,11 @@ colors = [
 ]
 
 
-class Cooking(commands.GroupCog, name="recipe"):
+class Cooking(
+    commands.GroupCog,
+    name="recipe",
+    description="Command related to recipes and cooking",
+):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
 

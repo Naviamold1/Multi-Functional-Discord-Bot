@@ -87,7 +87,7 @@ class Btn(discord.ui.View):
         await self.message.edit(view=self)
 
 
-class Trivia(commands.GroupCog, discord.ui.View, name="trivia"):
+class Trivia(commands.GroupCog, discord.ui.View, name="trivia", description="Trivia related commands"):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.trivia_in_progress = []

@@ -5,7 +5,7 @@ from discord import Interaction, app_commands
 from discord.ext import commands
 
 
-class Info(commands.Cog):
+class Info(commands.Cog, description="Info commands about the bot"):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
 
@@ -15,7 +15,10 @@ class Info(commands.Cog):
             f"🏓 Pong: {round (self.bot.latency * 1000)} ms"
         )
 
-    @commands.command()
+    @commands.command(
+        name="sync",
+        description="Sync the slash commands to the current guild(s). Owner only command.",
+    )
     @commands.guild_only()
     @commands.is_owner()
     async def sync(
