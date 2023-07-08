@@ -29,11 +29,21 @@ def update_cache(channel_id):
     print("Cache Updated")
 
 
-class Reaction(commands.GroupCog, name="reaction"):
+class Reaction(
+    commands.GroupCog, name="reaction", description="Manage auto-reactions on messages"
+):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    @app_commands.command(name="add")
+    @app_commands.command(
+        name="add",
+        description="Add auto-reaction(s) on message sent in that channel",
+    )
+    @app_commands.describe(
+        channel="The channel to add the auto-reaction(s) to",
+        reaction="The reaction that should be auto-reacted",
+        bots="If bot should auto-react to messages sent by bots / webhooks",
+    )
     async def add(
         self,
         interaction: Interaction,
@@ -69,14 +79,47 @@ class Reaction(commands.GroupCog, name="reaction"):
                 ephemeral=True,
             )
 
-    @app_commands.command(name="remove")
+    @app_commands.command(
+        name="configure",
+        description="Configure bots presence on auto-reaction(s) on message sent in that channel currently",
+    )
+    @app_commands.describe(
+        channel="The channel to modify the auto-reaction(s) to",
+        reaction="The auto-reaction that will undergo modification",
+        bots="If bot should auto-react to messages sent by bots / webhooks",
+    )
+    async def configure(
+        self,
+        interaction: Interaction,
+        channel: discord.TextChannel,
+        reaction: str,
+        bots: bool,
+    ):
+        res = await self.bot.db.execute(
+            f"UPDATE Reaction SET bots = $1 WHERE channel_id = $2 AND reaction = E'{reaction}'",
+            bots,
+            channel.id,
+        )
+        if res:
+            update_cache(channel.id)
+            await interaction.response.send_message(
+                f"Successfully Update {channel.mention} with emoji {reaction} with bots {bots}"
+            )
+
+    @app_commands.command(
+        name="remove",
+        description="Remove auto-reaction(s) on message sent in that channel",
+    )
+    @app_commands.describe(
+        channel="The channel to remove the auto-reaction(s) to",
+        reaction="The reaction that should be removed from auto-reacted",
+    )
     async def remove(
         self, interaction: Interaction, channel: discord.TextChannel, reaction: str
     ):
         res = await self.bot.db.execute(
-            "DELETE FROM Reaction WHERE channel_id = $1 AND reaction = $2",
+            f"DELETE FROM Reaction WHERE channel_id = $1 AND reaction = E'{reaction}'",
             channel.id,
-            reaction,
         )
         if res:
             update_cache(channel.id)
@@ -90,7 +133,8 @@ class Reaction(commands.GroupCog, name="reaction"):
                 ephemeral=True,
             )
 
-    @app_commands.command(name="list")
+    @app_commands.command(name="list", description="List all auto-reactions")
+    @app_commands.describe(channel="The channel to list the auto-reactions")
     async def list(self, interaction: Interaction, channel: discord.TextChannel):
         res = await get_channel_reactions(self.bot.db, channel.id)
         if res:
