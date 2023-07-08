@@ -14,11 +14,28 @@
 ```sh
 git clone https://github.com/Naviamold1/Multi-Functional-Discord-Bot.git
 cd Multi-Functional-Discord-Bot
+cp .env.template .env
 ```
 
-`Rename .env.template file to .env then open it and fill it in.`
+### ENV File
 
-After that continue with **EITHER** [Pip](#using-pip) **OR** [Pipenv](#using-pipenv) to install dependencies.
+Open the `.env` file and fill it in with asked values.
+
+Here's a list where you can get each values.
+
+| ENV                | Place to get it from                                  |
+| ------------------ | ----------------------------------------------------- |
+| BOT_TOKEN          | <https://discord.com/developers/>                     |
+| SPOONACULAR_SECRET | <https://spoonacular.com/food-api>                    |
+| CUTTLY_SECRET      | <https://cutt.ly/edit>                                |
+| WEATHER_SECRET     | <https://home.openweathermap.org/api_keys>            |
+| DB_SECRET          | <https://neon.tech/> or any other Postgresql Database |
+
+### Continue **EITHER** with [Pip](#using-pip) **OR** [Pipenv](#using-pipenv) to install dependencies (DON'T DO BOTH)
+
+- If you don't know what Pipenv is just go with [Pip](#using-pip)
+
+- If you are planing to contribute to this repo please go with [Pipenv](#using-pipenv)
 
 ### Using Pip
 
@@ -51,6 +68,8 @@ To get a full list of commands you can type `/help` but make sure to select your
 ## 🤝 Contributing
 
 Contributions, issues and feature requests are welcome!
+
+Though if you do plan to contribute please install and set this up via [Pipenv](#using-pipenv).
 
 Feel free to check [issues page](https://github.com/Naviamold1/Multi-Functional-Discord-Bot/issues).
 
