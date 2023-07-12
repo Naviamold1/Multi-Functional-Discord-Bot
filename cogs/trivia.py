@@ -87,7 +87,12 @@ class Btn(discord.ui.View):
         await self.message.edit(view=self)
 
 
-class Trivia(commands.GroupCog, discord.ui.View, name="trivia", description="Trivia related commands"):
+class Trivia(
+    commands.GroupCog,
+    discord.ui.View,
+    name="trivia",
+    description="Trivia related commands",
+):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.trivia_in_progress = []
@@ -152,15 +157,11 @@ class Trivia(commands.GroupCog, discord.ui.View, name="trivia", description="Tri
                 color=random.choice(colors),
             )
             embed.set_author(name="Guess the Flag!")
-            embed.set_image(
-                url=country_choice["flag"]
-            )
+            embed.set_image(url=country_choice["flag"])
 
             if buttons:
                 view = Btn(other_choice, answer=country_choice["country"], timeout=time)
-                view.message = await interaction.followup.send(
-                    embed=embed, view=view
-                )
+                view.message = await interaction.followup.send(embed=embed, view=view)
                 await view.wait()
 
             elif not buttons:

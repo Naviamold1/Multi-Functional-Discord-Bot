@@ -24,14 +24,10 @@ async def get_channel_reactions(db, channel_id):
 
 
 def update_cache(channel_id):
-    print("Updating Cache")
     reaction_cache.pop(channel_id)
-    print("Cache Updated")
 
 
-class Reaction(
-    commands.GroupCog, name="reaction", description="Manage auto-reactions"
-):
+class Reaction(commands.GroupCog, name="reaction", description="Manage auto-reactions"):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
@@ -70,14 +66,24 @@ class Reaction(
                 bots,
             )
             update_cache(channel.id)
-            await interaction.response.send_message(
-                f"Reactions have started for {channel.mention} with emoji {reaction} with bots {bots}"
+            embed = discord.Embed(
+                title="Success",
+                description=f"Auto-reactions have been started",
+                color=discord.Color.green,
             )
+            embed.add_field(name="Channel", value=channel.mention)
+            embed.add_field(name="Reaction", value=reaction)
+            embed.add_field(name="Bots", value=bots)
+            await interaction.response.send_message(embed=embed)
+
         except pgexec.UniqueViolationError:
-            await interaction.response.send_message(
-                f"The channel {channel.mention} already has started reactions with emoji {reaction}",
-                ephemeral=True,
+            embed = discord.Embed(
+                title="Error",
+                description=f"The channel {channel.mention} already has started reactions with emoji {reaction}",
+                color=discord.Color.red,
             )
+            embed.add_field(name="field", value="value", inline=False)
+            await interaction.response.send_message(embed=embed, ephemeral=True)
 
     @app_commands.command(
         name="configure",
@@ -123,15 +129,19 @@ class Reaction(
         )
         if res:
             update_cache(channel.id)
-
-            await interaction.response.send_message(
-                f"Reactions have been removed for {channel.mention} with emoji {reaction}"
+            embed = discord.Embed(
+                title="Success",
+                description=f"Auto-reactions have been removed for {channel.mention} with emoji {reaction}",
+                color=discord.Color.green,
             )
+            await interaction.response.send_message(embed=embed)
         else:
-            await interaction.response.send_message(
-                f"The channel {channel.mention} does not have reactions with emoji {reaction}",
-                ephemeral=True,
+            embed = discord.Embed(
+                title="Error",
+                description=f"The channel {channel.mention} does not have auto-reaction with emoji {reaction}",
+                color=discord.Color.red,
             )
+            await interaction.response.send_message(embed=embed, ephemeral=True)
 
     @app_commands.command(name="list", description="List all auto-reactions")
     @app_commands.describe(channel="The channel to list the auto-reactions")

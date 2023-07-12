@@ -46,6 +46,10 @@ class Cooking(
         if tag is not None:
             url += f"&tags={tag}"
         r = requests.get(url)
+        if r.status_code != 200:
+            return await interaction.response.send_message(
+                "Something went wrong, please try again later", ephemeral=True
+            )
         result = r.json()["recipes"][0]
         title_name = result["title"]
         image_name = result["image"]
@@ -66,39 +70,45 @@ class Cooking(
 
     @app_commands.command(name="search", description="Search for a specific dish")
     @app_commands.describe(
-        name="Enter the dish name",
-        id="Enter the dish ID",
+        method="Select how you want to search for a dish",
         tag="Select the type of recipe you want to get",
+    )
+    @app_commands.choices(
+        method=[
+            Choice(name="name", value="name"),
+            Choice(name="id", value="id"),
+        ]
     )
     async def search_recipe(
         self,
         interaction: Interaction,
-        name: Optional[str],
-        id: Optional[str],
+        method: Choice[str],
         tag: Optional[str],
     ):
         url = f'https://api.spoonacular.com/recipes/complexSearch?apiKey={os.getenv("SPOONACULAR_SECRET")}&addRecipeInformation=True'
-        if name:
-            url += f"&query={name}&type={tag}"
-        elif id:
-            url = f'https://api.spoonacular.com/recipes/{id}/information?apiKey={os.getenv("SPOONACULAR_SECRET")}'
+        if method.value == "name":
+            url += f"&query={method.value}&type={tag}"
+        elif method.value == "id":
+            url = f'https://api.spoonacular.com/recipes/{method.value}/information?apiKey={os.getenv("SPOONACULAR_SECRET")}'
         try:
             r = requests.get(url)
-            result = r.json()["results"][0] if name else r.json()
+            result = r.json()["results"][0] if method.value == "name" else r.json()
             title_name = result["title"]
             image_name = result["image"]
             recipe_link = result["spoonacularSourceUrl"]
             scores_result1 = result["aggregateLikes"]
             get_id = result["id"]
             embed = discord.Embed(
-                title=f"Search Results for {name}" if name else title_name,
+                title=f"Search Results for {method.value}"
+                if method.value == "name"
+                else title_name,
                 description=f"{scores_result1} Person liked this recipe 😀"
-                if id
+                if method.value == "id"
                 else "",
-                color=random.choice(colors),
+                color=discord.Color.green(),
                 url=recipe_link,
             )
-            if name:
+            if method.value == "name":
                 for item in r.json()["results"]:
                     embed.add_field(
                         name=item["title"],
@@ -116,9 +126,9 @@ class Cooking(
         except Exception as e:
             print(e)
             embed = discord.Embed(
-                title=f"Nothing was found with the **{id}** id."
-                if id
-                else f"Search Results for **{name}**:",
+                title=f"Nothing was found with the id **{method.value}**"
+                if method.value == "id"
+                else f"Nothing was found with the name **{method.value}**",
                 description="Check if you are typing it correctly.",
                 color=discord.Color.red(),
             )

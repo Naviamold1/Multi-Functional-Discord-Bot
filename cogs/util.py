@@ -1,5 +1,4 @@
 import os
-import random
 import urllib
 from typing import Optional
 
@@ -12,7 +11,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-class Util(commands.Cog, description='Utility commands'):
+class Util(commands.Cog, description="Utility commands"):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
 

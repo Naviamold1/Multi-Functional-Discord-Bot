@@ -1,8 +1,6 @@
 from datetime import datetime
 
-import chessdotcom
 import discord
-import lichess.api
 from chessdotcom import Client, get_player_profile, get_random_daily_puzzle
 from discord import Interaction, app_commands
 from discord.app_commands import Choice
