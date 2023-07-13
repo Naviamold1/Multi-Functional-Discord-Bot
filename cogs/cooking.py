@@ -71,6 +71,7 @@ class Cooking(
     @app_commands.command(name="search", description="Search for a specific dish")
     @app_commands.describe(
         method="Select how you want to search for a dish",
+        query="Enter the name or id of the dish you want to search for",
         tag="Select the type of recipe you want to get",
     )
     @app_commands.choices(
@@ -83,13 +84,14 @@ class Cooking(
         self,
         interaction: Interaction,
         method: Choice[str],
+        query: str,
         tag: Optional[str],
     ):
         url = f'https://api.spoonacular.com/recipes/complexSearch?apiKey={os.getenv("SPOONACULAR_SECRET")}&addRecipeInformation=True'
         if method.value == "name":
-            url += f"&query={method.value}&type={tag}"
+            url += f"&query={query}&type={tag}"
         elif method.value == "id":
-            url = f'https://api.spoonacular.com/recipes/{method.value}/information?apiKey={os.getenv("SPOONACULAR_SECRET")}'
+            url = f'https://api.spoonacular.com/recipes/{query}/information?apiKey={os.getenv("SPOONACULAR_SECRET")}'
         try:
             r = requests.get(url)
             result = r.json()["results"][0] if method.value == "name" else r.json()
@@ -99,7 +101,7 @@ class Cooking(
             scores_result1 = result["aggregateLikes"]
             get_id = result["id"]
             embed = discord.Embed(
-                title=f"Search Results for {method.value}"
+                title=f"Search Results for {query}"
                 if method.value == "name"
                 else title_name,
                 description=f"{scores_result1} Person liked this recipe 😀"
@@ -112,7 +114,7 @@ class Cooking(
                 for item in r.json()["results"]:
                     embed.add_field(
                         name=item["title"],
-                        value=f'do: **/search-recipe id:{item["id"]}** for more info about this dish.',
+                        value=f'do: **/recipe search method:id query:{item["id"]}** for more info about this dish.',
                         inline=True,
                     )
             else:
@@ -123,19 +125,18 @@ class Cooking(
                 embed.set_footer(text=f"Product ID: {get_id}")
             embed.set_image(url=image_name)
             await interaction.response.send_message(embed=embed)
-        except Exception as e:
-            print(e)
+        except requests.exceptions.JSONDecodeError:
             embed = discord.Embed(
-                title=f"Nothing was found with the id **{method.value}**"
+                title=f"Nothing was found with the id **{query}**"
                 if method.value == "id"
-                else f"Nothing was found with the name **{method.value}**",
+                else f"Nothing was found with the name **{query}**",
                 description="Check if you are typing it correctly.",
                 color=discord.Color.red(),
             )
             embed.set_image(
                 url="https://cdn-icons-png.flaticon.com/512/6134/6134065.png"
             )
-            await interaction.response.send_message(embed=embed)
+            await interaction.response.send_message(embed=embed, ephemeral=True)
 
 
 async def setup(bot: commands.Bot):
