@@ -69,7 +69,7 @@ class Reaction(commands.GroupCog, name="reaction", description="Manage auto-reac
             embed = discord.Embed(
                 title="Success",
                 description=f"Auto-reactions have been started",
-                color=discord.Color.green,
+                color=discord.Color.green(),
             )
             embed.add_field(name="Channel", value=channel.mention)
             embed.add_field(name="Reaction", value=reaction)
@@ -80,7 +80,7 @@ class Reaction(commands.GroupCog, name="reaction", description="Manage auto-reac
             embed = discord.Embed(
                 title="Error",
                 description=f"The channel {channel.mention} already has started reactions with emoji {reaction}",
-                color=discord.Color.red,
+                color=discord.Color.red(),
             )
             embed.add_field(name="field", value="value", inline=False)
             await interaction.response.send_message(embed=embed, ephemeral=True)
@@ -123,23 +123,23 @@ class Reaction(commands.GroupCog, name="reaction", description="Manage auto-reac
     async def remove(
         self, interaction: Interaction, channel: discord.TextChannel, reaction: str
     ):
-        res = await self.bot.db.execute(
+        await self.bot.db.execute(
             f"DELETE FROM Reaction WHERE channel_id = $1 AND reaction = E'{reaction}'",
             channel.id,
         )
-        if res:
+        try:
             update_cache(channel.id)
             embed = discord.Embed(
                 title="Success",
                 description=f"Auto-reactions have been removed for {channel.mention} with emoji {reaction}",
-                color=discord.Color.green,
+                color=discord.Color.green(),
             )
             await interaction.response.send_message(embed=embed)
-        else:
+        except KeyError:
             embed = discord.Embed(
                 title="Error",
                 description=f"The channel {channel.mention} does not have auto-reaction with emoji {reaction}",
-                color=discord.Color.red,
+                color=discord.Color.red(),
             )
             await interaction.response.send_message(embed=embed, ephemeral=True)
 
