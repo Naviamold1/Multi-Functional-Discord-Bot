@@ -98,6 +98,120 @@ class Trivia(
         self.trivia_in_progress = []
         self.trivia_end = []
 
+    async def get_list(self, interaction, continent):
+        round_num = 0
+        global users
+        users = []
+        await interaction.response.defer()
+
+        with open("assets/list.json", "r") as file:
+            data = json.load(file)
+        if continent is not None:
+            data = [cont for cont in data if cont["continent"] == continent.value]
+        start = tm.time()
+        previously_selected = []
+        return round_num, data, start, previously_selected
+
+    async def main_logic(
+        self,
+        interaction,
+        rounds,
+        time,
+        buttons,
+        round_num,
+        data,
+        previously_selected,
+        mode,
+    ):
+        if len(previously_selected) == len(data):
+            previously_selected = []
+        country_choice = random.choice(data)
+        other_choice = random.sample(
+            [x["country"] for x in data if x != country_choice], 3
+        )
+        while country_choice["country"] in previously_selected:
+            country_choice = random.choice(data)
+        previously_selected.append(country_choice["country"])
+        embed = Embed(
+            title=f"Round {round_num} of {rounds}",
+            description=f"Time limit: <t:{int(tm.time())+time}:R>",
+            timestamp=discord.utils.utcnow(),
+            color=random.choice(colors),
+        )
+        embed.set_author(
+            name="Guess the Flag!" if mode == "flag" else "Guess the Country!"
+        )
+        embed.set_image(url=country_choice[mode])
+
+        if buttons:
+            view = Btn(other_choice, answer=country_choice["country"], timeout=time)
+            view.message = await interaction.followup.send(embed=embed, view=view)
+            await view.wait()
+
+        elif not buttons:
+            await interaction.followup.send(embed=embed)
+
+            def check(m):
+                country = (
+                    str(country_choice.get("country", ""))
+                    .lower()
+                    .replace(" ", "")
+                    .replace("-", "")
+                )
+                msg = str(m.content).lower().replace(" ", "").replace("-", "")
+                alias = country_choice.get("alias", None)
+
+                if alias:
+                    if isinstance(alias, list):
+                        for i in alias:
+                            i = i.lower().replace(" ", "").replace("-", "")
+                            if msg == i:
+                                return True
+                    else:
+                        alias = alias.lower().replace(" ", "").replace("-", "")
+                        if msg == alias:
+                            return True
+
+                return msg == country
+
+            try:
+                res = await self.bot.wait_for("message", timeout=time, check=check)
+            except TimeoutError:
+                await interaction.followup.send(
+                    f":x: No one gave the correct answer. It was **{country_choice['country']}**"
+                )
+            else:
+                users.append(f"{res.author.name}#{res.author.discriminator}")
+                message = await res.channel.fetch_message(res.id)
+                await message.add_reaction("✅")
+        if interaction.guild_id in self.trivia_end:
+            self.trivia_end.remove(interaction.guild_id)
+            return
+
+    async def final_part(self, interaction, start):
+        end = tm.time()
+        score_embed = Embed(
+            title="Final Scores!", color=discord.Color.from_rgb(148, 120, 192)
+        )
+        lu = Counter(users)
+        lu = lu.most_common()
+        for i, (item, count) in enumerate(lu):
+            if i == 0:
+                item = f":first_place: {item}"
+            elif i == 1:
+                item = f":second_place: {item}"
+            elif i == 2:
+                item = f":third_place: {item}"
+            else:
+                item = item
+
+            score_embed.add_field(name=str(item), value=count, inline=False)
+        score_embed.set_footer(
+            text=f"Time taken: {round(end - start, 2)}s / {round((end - start)/60, 2)}min"
+        )
+        await interaction.followup.send(embed=score_embed)
+        self.trivia_in_progress.remove(interaction.guild_id)
+
     @app_commands.command(name="flags", description="Play flag trivia")
     @app_commands.describe(
         rounds="Amount of Rounds you want to play",
@@ -129,106 +243,25 @@ class Trivia(
                     ephemeral=True,
                 )
         self.trivia_in_progress.append(interaction.guild_id)
-        round_num = 1
-        global users
-        users = []
-        await interaction.response.defer()
 
-        with open("assets/list.json", "r") as file:
-            data = json.load(file)
-        if continent is not None:
-            data = [cont for cont in data if cont["continent"] == continent.value]
-        start = tm.time()
-        previously_selected = []
+        round_num, data, start, previously_selected = await self.get_list(
+            interaction, continent
+        )
+
         for _ in range(rounds):
-            if len(previously_selected) == len(data):
-                previously_selected = []
-            country_choice = random.choice(data)
-            other_choice = random.sample(
-                [x["country"] for x in data if x != country_choice], 3
-            )
-            while country_choice["country"] in previously_selected:
-                country_choice = random.choice(data)
-            previously_selected.append(country_choice["country"])
-            embed = Embed(
-                title=f"Round {round_num} of {rounds}",
-                description=f"Time limit: <t:{int(tm.time())+time}:R>",
-                timestamp=discord.utils.utcnow(),
-                color=random.choice(colors),
-            )
-            embed.set_author(name="Guess the Flag!")
-            embed.set_image(url=country_choice["flag"])
-
-            if buttons:
-                view = Btn(other_choice, answer=country_choice["country"], timeout=time)
-                view.message = await interaction.followup.send(embed=embed, view=view)
-                await view.wait()
-
-            elif not buttons:
-                await interaction.followup.send(embed=embed)
-
-                def check(m):
-                    js = str(country_choice["country"])
-                    js = js.lower()
-                    msg = str(m.content)
-                    msg = msg.lower()
-                    js = js.replace(" ", "")
-                    msg = msg.replace(" ", "")
-                    js = js.replace("-", "")
-                    msg = msg.replace("-", "")
-                    ali = country_choice.get("alias", None)
-                    if ali:
-                        if type(ali) == list:
-                            for i in ali:
-                                i = i.lower()
-                                i = i.replace(" ", "")
-                                i = i.replace("-", "")
-                                if msg == i:
-                                    return True
-                        else:
-                            ali = ali.lower()
-                            ali = ali.replace(" ", "")
-                            ali = ali.replace("-", "")
-                            if msg == ali:
-                                return True
-                    return msg == js
-
-                try:
-                    res = await self.bot.wait_for("message", timeout=time, check=check)
-                except TimeoutError:
-                    await interaction.followup.send(
-                        f":x: No one gave the correct answer. It was **{country_choice['country']}**"
-                    )
-                else:
-                    users.append(f"{res.author.name}#{res.author.discriminator}")
-                    message = await res.channel.fetch_message(res.id)
-                    await message.add_reaction("✅")
-            if interaction.guild_id in self.trivia_end:
-                self.trivia_end.remove(interaction.guild_id)
-                return
             round_num += 1
-        end = tm.time()
-        score_embed = Embed(
-            title="Final Scores!", color=discord.Color.from_rgb(148, 120, 192)
-        )
-        lu = Counter(users)
-        lu = lu.most_common()
-        for i, (item, count) in enumerate(lu):
-            if i == 0:
-                item = f":first_place: {item}"
-            elif i == 1:
-                item = f":second_place: {item}"
-            elif i == 2:
-                item = f":third_place: {item}"
-            else:
-                item = item
+            await self.main_logic(
+                interaction,
+                rounds,
+                time,
+                buttons,
+                round_num,
+                data,
+                previously_selected,
+                mode="flag",
+            )
 
-            score_embed.add_field(name=str(item), value=count, inline=False)
-        score_embed.set_footer(
-            text=f"Time taken: {round(end - start, 2)}s / {round((end - start)/60, 2)}min"
-        )
-        await interaction.followup.send(embed=score_embed)
-        self.trivia_in_progress.remove(interaction.guild_id)
+        await self.final_part(interaction, start)
 
     @app_commands.command(name="maps", description="Play map trivia")
     @app_commands.describe(
@@ -261,104 +294,25 @@ class Trivia(
                     ephemeral=True,
                 )
         self.trivia_in_progress.append(interaction.guild_id)
-        round_num = 1
-        global users
-        users = []
-        await interaction.response.defer()
 
-        with open("assets/list.json", "r") as file:
-            data = json.load(file)
-        if continent is not None:
-            data = [cont for cont in data if cont["continent"] == continent.value]
-        start = tm.time()
-        previously_selected = []
+        round_num, data, start, previously_selected = await self.get_list(
+            interaction, continent
+        )
+
         for _ in range(rounds):
-            if len(previously_selected) == len(data):
-                previously_selected = []
-            country_choice = random.choice(data)
-            other_choice = random.sample(
-                [x["country"] for x in data if x != country_choice], 3
-            )
-            while country_choice["country"] in previously_selected:
-                country_choice = random.choice(data)
-            previously_selected.append(country_choice["country"])
-            embed = Embed(
-                title=f"Round {round_num} of {rounds}",
-                description=f"Time limit: <t:{int(tm.time())+time}:R>",
-                timestamp=discord.utils.utcnow(),
-                color=random.choice(colors),
-            )
-            embed.set_author(name="Guess the Country!")
-            embed.set_image(url=country_choice["map"])
-            if buttons:
-                view = Btn(other_choice, answer=country_choice["country"], timeout=time)
-                view.message = await interaction.followup.send(embed=embed, view=view)
-                await view.wait()
-            elif not buttons:
-                await interaction.followup.send(embed=embed)
-
-                def check(m):
-                    js = str(country_choice["country"])
-                    js = js.lower()
-                    msg = str(m.content)
-                    msg = msg.lower()
-                    js = js.replace(" ", "")
-                    msg = msg.replace(" ", "")
-                    js = js.replace("-", "")
-                    msg = msg.replace("-", "")
-                    ali = country_choice.get("alias", None)
-                    if ali:
-                        if type(ali) == list:
-                            for i in ali:
-                                i = i.lower()
-                                i = i.replace(" ", "")
-                                i = i.replace("-", "")
-                                if msg == i:
-                                    return True
-                        else:
-                            ali = ali.lower()
-                            ali = ali.replace(" ", "")
-                            ali = ali.replace("-", "")
-                            if msg == ali:
-                                return True
-                    return msg == js
-
-                try:
-                    res = await self.bot.wait_for("message", timeout=time, check=check)
-                except TimeoutError:
-                    await interaction.followup.send(
-                        f":x: No one gave the correct answer. It was **{country_choice['country']}**"
-                    )
-                else:
-                    users.append(f"{res.author.name}#{res.author.discriminator}")
-                    message = await res.channel.fetch_message(res.id)
-                    await message.add_reaction("✅")
-            if interaction.guild_id in self.trivia_end:
-                self.trivia_end.remove(interaction.guild_id)
-                return
             round_num += 1
-        end = tm.time()
-        score_embed = Embed(
-            title="Final Scores!", color=discord.Color.from_rgb(148, 120, 192)
-        )
-        lu = Counter(users)
-        lu = lu.most_common()
-        for i, (item, count) in enumerate(lu):
-            if i == 0:
-                item = f":first_place: {item}"
-            elif i == 1:
-                item = f":second_place: {item}"
-            elif i == 2:
-                item = f":third_place: {item}"
-            else:
-                item = item
+            await self.main_logic(
+                interaction,
+                rounds,
+                time,
+                buttons,
+                round_num,
+                data,
+                previously_selected,
+                mode="map",
+            )
 
-            score_embed.add_field(name=str(item), value=count, inline=False)
-        score_embed.set_footer(
-            text=f"Time taken: {round(end - start, 2)}s / {round((end - start)/60, 2)}min"
-        )
-        await interaction.followup.send(embed=score_embed)
-        self.trivia_in_progress.remove(interaction.guild_id)
+        await self.final_part(interaction, start)
 
     @app_commands.command(name="end", description="Ends ongoing trivia")
     async def end(self, interaction: Interaction):
