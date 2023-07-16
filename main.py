@@ -19,7 +19,14 @@ class MainBot(commands.Bot):
         )
 
     async def setup_hook(self) -> None:
-        self.db = await asyncpg.create_pool(os.getenv("DB_SECRET"))
+        db_secret = f'postgresql://{os.getenv("POSTGRES_USER")}:{os.getenv("POSTGRES_PASSWORD")}@localhost:5432/{os.getenv("POSTGRES_DB")}'
+        if os.getenv("DB_SECRET") is not None:
+            db_secret = os.getenv("DB_SECRET")
+        self.db = await asyncpg.create_pool(
+            db_secret,
+            statement_cache_size=0,
+        )
+
         if self.db:
             print("Connected to DB")
         await self.db.execute(
