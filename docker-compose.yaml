@@ -1,0 +1,21 @@
+version: "3.5"
+services:
+  bot:
+    build: .
+    restart: always
+    env_file:
+      - .env
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: reactioner
+    volumes:
+      - db:/var/lib/postgres/data/
+    ports:
+      - 5432:5432
+
+volumes:
+  db:
