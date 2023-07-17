@@ -24,7 +24,14 @@ async def get_channel_reactions(db, channel_id):
 
 
 def update_cache(channel_id):
-    reaction_cache.pop(channel_id)
+    try:
+        reaction_cache.pop(channel_id)
+        return {"status": 200, "message": "success cache update"}
+    except KeyError:
+        return {
+            "status": 403,
+            "message": f"channel_id: {channel_id} was not found in cache",
+        }
 
 
 class Reaction(commands.GroupCog, name="reaction", description="Manage auto-reactions"):
@@ -127,15 +134,15 @@ class Reaction(commands.GroupCog, name="reaction", description="Manage auto-reac
             f"DELETE FROM Reaction WHERE channel_id = $1 AND reaction = E'{reaction}'",
             channel.id,
         )
-        try:
-            update_cache(channel.id)
+        uc = update_cache(channel.id)
+        if uc["status"] == 200:
             embed = discord.Embed(
                 title="Success",
                 description=f"Auto-reactions have been removed for {channel.mention} with emoji {reaction}",
                 color=discord.Color.green(),
             )
             await interaction.response.send_message(embed=embed)
-        except KeyError:
+        elif uc["status"] == 403:
             embed = discord.Embed(
                 title="Error",
                 description=f"The channel {channel.mention} does not have auto-reaction with emoji {reaction}",

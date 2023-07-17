@@ -5,17 +5,28 @@ services:
     restart: always
     env_file:
       - .env
-  db:
+    depends_on:
+      - postgres
+
+  postgres:
     image: postgres
     restart: always
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: reactioner
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"
     volumes:
       - db:/var/lib/postgres/data/
-    ports:
-      - 5432:5432
+
+  # pg_admin:
+  #   image: dpage/pgadmin4
+  #   environment:
+  #     - PGADMIN_DEFAULT_EMAIL=admin@email.com
+  #     - PGADMIN_DEFAULT_PASSWORD=admin
+  #     - PGADMIN_LISTEN_PORT=5050
+  #   ports:
+  #     - "5050:5050"
 
 volumes:
   db:

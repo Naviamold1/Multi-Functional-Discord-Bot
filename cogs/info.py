@@ -2,6 +2,7 @@ from typing import Literal, Optional
 
 import discord
 from discord import Interaction, app_commands
+from discord.app_commands import Choice
 from discord.ext import commands
 
 
@@ -55,6 +56,26 @@ class Info(commands.Cog, description="Info commands about the bot"):
                 ret += 1
 
         await ctx.send(f"Synced the tree to {ret}/{len(guilds)}.")
+
+    @commands.is_owner()
+    @commands.guild_only()
+    @app_commands.command(name="reload")
+    @app_commands.choices(
+        extension=[
+            Choice(name="trivia", value="cogs.trivia"),
+            Choice(name="custom", value="cogs.custom"),
+            Choice(name="util", value="cogs.util"),
+            Choice(name="chess", value="cogs.chess"),
+            Choice(name="cooking", value="cogs.cooking"),
+            Choice(name="info", value="cogs.info"),
+            Choice(name="reaction", value="cogs.reaction"),
+        ]
+    )
+    async def reload(self, interaction: Interaction, extension: Choice[str]):
+        await self.bot.reload_extension(extension.value)
+        await interaction.response.send_message(
+            f"Reloaded **{extension.value}**", ephemeral=True
+        )
 
 
 async def setup(bot: commands.Bot):
