@@ -63,7 +63,7 @@ python main.py
 ```sh
 pipenv shell
 pipenv install
-pipenv run main.py
+pipenv run python main.py
 ```
 
 ## Usage
