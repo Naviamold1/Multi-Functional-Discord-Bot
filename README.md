@@ -45,11 +45,11 @@ docker compose up -d
 
 ### Manual Installation
 
-### Continue **EITHER** with [Pip](#using-pip) **OR** [Pipenv](#using-pipenv) to install dependencies
+### Continue **EITHER** with [Pip](#using-pip) **OR** [Poetry](#using-poetry) to install dependencies
 
 - If you don't know what Pipenv is just go with [Pip](#using-pip)
 
-- If you are planing to contribute to this repo please go with [Pipenv](#using-pipenv)
+- If you are planing to contribute to this repo please go with [Poetry](#using-poetry)
 
 ### Using Pip
 
@@ -58,12 +58,12 @@ pip install -r requirements.txt
 python main.py
 ```
 
-### Using [Pipenv](https://pipenv.pypa.io/en/latest/installation/#preferred-installation-of-pipenv)
+### Using [Poetry](https://pipenv.pypa.io/en/latest/installation/#preferred-installation-of-pipenv)
 
 ```sh
-pipenv shell
-pipenv install
-pipenv run python main.py
+poetry shell
+poetry install
+poetry run python main.py
 ```
 
 ## Usage
@@ -83,7 +83,7 @@ To get a full list of commands you can type `/help` but make sure to select your
 
 Contributions, issues and feature requests are welcome!
 
-Though if you do plan to contribute please install and set this up via [Pipenv](#using-pipenv).
+Though if you do plan to contribute please install and set this up via [Poetry](#using-poetry).
 
 Feel free to check [issues page](https://github.com/Naviamold1/Multi-Functional-Discord-Bot/issues).
 

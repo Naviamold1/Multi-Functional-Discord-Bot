@@ -1,5 +1,4 @@
 import json
-import os
 import random
 import time as tm
 from collections import Counter
