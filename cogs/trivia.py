@@ -6,7 +6,7 @@ from typing import Optional
 
 import discord
 from discord import Embed, Interaction, app_commands
-from discord.app_commands import Choice
+from discord.app_commands import Choice, Group
 from discord.ext import commands
 
 colors = [
@@ -27,6 +27,8 @@ colors = [
     0xFFB6C1,
     0x00CED1,
 ]
+
+users = []
 
 
 class CustomButton(discord.ui.Button["Btn"]):
@@ -97,10 +99,10 @@ class Trivia(
         self.trivia_in_progress = []
         self.trivia_end = []
 
+    geography = Group(name="geography", description="Geography trivia subgroup")
+
     async def get_list(self, interaction, continent):
         round_num = 0
-        global users
-        users = []
         await interaction.response.defer()
 
         with open("assets/list.json", "r") as file:
@@ -133,7 +135,7 @@ class Trivia(
         previously_selected.append(country_choice["country"])
         embed = Embed(
             title=f"Round {round_num} of {rounds}",
-            description=f"Time limit: <t:{int(tm.time())+time}:R>",
+            description=f"Round ends <t:{int(tm.time())+time}:R>",
             timestamp=discord.utils.utcnow(),
             color=random.choice(colors),
         )
@@ -183,9 +185,6 @@ class Trivia(
                 users.append(f"{res.author.name}#{res.author.discriminator}")
                 message = await res.channel.fetch_message(res.id)
                 await message.add_reaction("✅")
-        if interaction.guild_id in self.trivia_end:
-            self.trivia_end.remove(interaction.guild_id)
-            return
 
     async def final_part(self, interaction, start):
         end = tm.time()
@@ -211,87 +210,44 @@ class Trivia(
         await interaction.followup.send(embed=score_embed)
         self.trivia_in_progress.remove(interaction.guild_id)
 
-    @app_commands.command(name="flags", description="Play flag trivia")
+    @geography.command(name="guess", description="Play flag trivia")
     @app_commands.describe(
         rounds="Amount of Rounds you want to play",
         time="Time limit of each round in seconds",
+        quiz="The type of quiz you want to play",
         continent="Only include a specific Continent",
         buttons="Include buttons for each answer aka easy mode",
     )
     @app_commands.choices(
+        quiz=[Choice(name="Flags", value="Flags"), Choice(name="Maps", value="Maps")],
         continent=[
             Choice(name="Europe", value="Europe"),
             Choice(name="Asia", value="Asia"),
             Choice(name="Americas", value="Americas"),
             Choice(name="Africa", value="Africa"),
             Choice(name="Oceania", value="Oceania"),
-        ]
+        ],
     )
-    async def flags(
+    async def country_guess(
         self,
         interaction: Interaction,
+        quiz: Choice[str],
         continent: Optional[Choice[str]],
         rounds: int = 5,
         time: int = 60,
         buttons: bool = False,
     ):
-        for server in self.trivia_in_progress:
-            if server == interaction.guild_id:
-                return await interaction.response.send_message(
-                    "A game is already in progress, please wait for it to finish.",
-                    ephemeral=True,
-                )
-        self.trivia_in_progress.append(interaction.guild_id)
-
-        round_num, data, start, previously_selected = await self.get_list(
-            interaction, continent
-        )
-
-        for _ in range(rounds):
-            round_num += 1
-            await self.main_logic(
-                interaction,
-                rounds,
-                time,
-                buttons,
-                round_num,
-                data,
-                previously_selected,
-                mode="flag",
+        if rounds > 197:
+            await interaction.response.send_message(
+                "197 is the **max** amount of rounds allowed.", ephemeral=True
             )
+            rounds = 197
 
-        await self.final_part(interaction, start)
-
-    @app_commands.command(name="maps", description="Play map trivia")
-    @app_commands.describe(
-        rounds="Amount of Rounds you want to play",
-        time="Time limit of each round in seconds",
-        continent="Only include a specific Continent",
-        buttons="Include buttons for each answer aka easy mode",
-    )
-    @app_commands.choices(
-        continent=[
-            Choice(name="Europe", value="Europe"),
-            Choice(name="Asia", value="Asia"),
-            Choice(name="Americas", value="Americas"),
-            Choice(name="Africa", value="Africa"),
-            Choice(name="Oceania", value="Oceania"),
-        ]
-    )
-    async def maps(
-        self,
-        interaction: Interaction,
-        continent: Optional[Choice[str]],
-        rounds: int = 5,
-        time: int = 60,
-        buttons: bool = False,
-    ):
-        for server in self.trivia_in_progress:
-            if server == interaction.guild_id:
-                return await interaction.response.send_message(
-                    "A game is already in progress, please wait for it to finish.",
-                    ephemeral=True,
-                )
+        if interaction.guild_id in self.trivia_in_progress:
+            return await interaction.response.send_message(
+                "A game is already in progress, please wait for it to finish.",
+                ephemeral=True,
+            )
         self.trivia_in_progress.append(interaction.guild_id)
 
         round_num, data, start, previously_selected = await self.get_list(
@@ -300,6 +256,9 @@ class Trivia(
 
         for _ in range(rounds):
             round_num += 1
+            if interaction.guild_id in self.trivia_end:
+                self.trivia_end.remove(interaction.guild_id)
+                break
             await self.main_logic(
                 interaction,
                 rounds,
@@ -308,7 +267,7 @@ class Trivia(
                 round_num,
                 data,
                 previously_selected,
-                mode="map",
+                mode="flag" if quiz.value == "Flags" else "map",
             )
 
         await self.final_part(interaction, start)
@@ -318,11 +277,10 @@ class Trivia(
         if interaction.guild_id in self.trivia_in_progress:
             if interaction.guild_id not in self.trivia_end:
                 self.trivia_end.append(interaction.guild_id)
-                self.trivia_in_progress.remove(interaction.guild_id)
             await interaction.response.send_message("Trivia match ended.")
         else:
             await interaction.response.send_message(
-                "No trivia match is currently in progress.", ephemeral=True
+                "No trivia match is currently in progress here.", ephemeral=True
             )
 
 
