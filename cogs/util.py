@@ -91,7 +91,7 @@ class Util(commands.Cog, description="Utility commands"):
             )
         else:
             embed = discord.Embed(
-                title=f"Oops an Error occurred",
+                title="Oops an Error occurred",
                 description=error,
                 color=discord.Color.red(),
             )

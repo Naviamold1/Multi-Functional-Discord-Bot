@@ -66,6 +66,12 @@ poetry install
 poetry run python main.py
 ```
 
+If you plan on altering or contributing to this repo you should also install dev dependencies
+
+```sh
+poetry install --with dev
+```
+
 ## Usage
 
 After running and adding bot to your server simply type `/` to view and use command.

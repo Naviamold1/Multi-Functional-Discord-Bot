@@ -5,7 +5,7 @@ description = "Discord Bot With Different Functions"
 authors = []
 license = "MIT"
 readme = "README.md"
-packages = [{include = "multi_functional_discord_bot"}]
+packages = [{ include = "cogs" }]
 
 [tool.poetry.dependencies]
 python = "^3.11"
@@ -17,6 +17,13 @@ requests = "*"
 discord-pretty-help = "^2.0.7"
 asyncpg = "^0.28.0"
 
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.7.0"
+pre-commit = "^3.3.3"
+flake8 = "^6.0.0"
+flake8-length = "^0.3.1"
+isort = "^5.12.0"
 
 [build-system]
 requires = ["poetry-core"]

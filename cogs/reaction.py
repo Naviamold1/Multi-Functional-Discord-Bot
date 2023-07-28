@@ -75,7 +75,7 @@ class Reaction(commands.GroupCog, name="reaction", description="Manage auto-reac
             update_cache(channel.id)
             embed = discord.Embed(
                 title="Success",
-                description=f"Auto-reactions have been started",
+                description="Auto-reactions have been started",
                 color=discord.Color.green(),
             )
             embed.add_field(name="Channel", value=channel.mention)
@@ -158,7 +158,7 @@ class Reaction(commands.GroupCog, name="reaction", description="Manage auto-reac
             embed = discord.Embed(
                 title="List of Reactions",
                 description=f"List of Reactions for Channel {channel.mention}",
-                color=0xFF0000,
+                color=discord.Color.yellow(),
             )
             for reaction, bots in zip(res["reaction"], res["bots"]):
                 embed.add_field(name=reaction, value=f"Bots: {bots}", inline=False)

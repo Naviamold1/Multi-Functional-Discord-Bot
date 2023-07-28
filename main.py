@@ -23,10 +23,7 @@ class MainBot(commands.Bot):
         if os.getenv("DB_SECRET") is not None:
             db_secret = os.getenv("DB_SECRET")
 
-        self.db = await asyncpg.create_pool(
-            db_secret,
-            statement_cache_size=0,
-        )
+        self.db = await asyncpg.create_pool(db_secret)
 
         if self.db:
             print("Connected to DB")

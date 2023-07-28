@@ -1,0 +1,17 @@
+{
+  "cSpell.words": [
+    "bcrkiye",
+    "chpuzzle",
+    "chsearch",
+    "chstats",
+    "d'ivoire",
+    "DRPK",
+    "Turkiye"
+  ],
+  "json.schemas": [
+    {
+      "fileMatch": ["assets/list.json"],
+      "url": "https://raw.githubusercontent.com/Naviamold1/common-country-list/cdd464839a2108ce7e5d150d0af8935818c6dc15/list.schema.json"
+    }
+  ]
+}
