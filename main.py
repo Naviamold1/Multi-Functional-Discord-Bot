@@ -1,3 +1,4 @@
+import logging
 import os
 
 import asyncpg
@@ -7,6 +8,9 @@ from dotenv import load_dotenv
 from pretty_help import PrettyHelp
 
 load_dotenv()
+
+handler = logging.FileHandler(filename="discord.log", encoding="utf-8", mode="w")
+logger = logging.getLogger("discord")
 
 
 class MainBot(commands.Bot):
@@ -26,7 +30,7 @@ class MainBot(commands.Bot):
         self.db = await asyncpg.create_pool(db_secret)
 
         if self.db:
-            print("Connected to DB")
+            logger.info("Connected to DB")
         await self.db.execute(
             "CREATE TABLE IF NOT EXISTS Guild(id BIGINT PRIMARY KEY UNIQUE NOT NULL GENERATED ALWAYS AS IDENTITY, guild BIGINT UNIQUE NOT NULL)"
         )
@@ -44,16 +48,13 @@ class MainBot(commands.Bot):
             "cogs.trivia",
             "cogs.chess",
             "cogs.reaction",
+            "cogs.transport",
+            "jishaku",
         ]
         for ext in cogs:
             await self.load_extension(ext)
         if os.path.exists(r"cogs\custom.py"):
             await self.load_extension("cogs.custom")
-
-        sync = await self.tree.sync()
-        print(f"Synced {len(sync)} command(s):")
-        for command in sync:
-            print(command.name)
 
     async def on_ready(self):
         print(f"We have logged in as {self.user}")
@@ -67,4 +68,4 @@ class MainBot(commands.Bot):
             print(server.name)
 
 
-MainBot().run(os.getenv("BOT_TOKEN"))
+MainBot().run(os.getenv("BOT_TOKEN"), log_handler=handler, log_level=logging.INFO)

@@ -69,6 +69,7 @@ class Info(commands.Cog, description="Info commands about the bot"):
             Choice(name="cooking", value="cogs.cooking"),
             Choice(name="info", value="cogs.info"),
             Choice(name="reaction", value="cogs.reaction"),
+            Choice(name="transport", value="cogs.transport"),
         ]
     )
     async def reload(self, interaction: Interaction, extension: Choice[str]):

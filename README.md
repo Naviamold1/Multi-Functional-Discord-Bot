@@ -47,7 +47,7 @@ docker compose up -d
 
 ### Continue **EITHER** with [Pip](#using-pip) **OR** [Poetry](#using-poetry) to install dependencies
 
-- If you don't know what Pipenv is just go with [Pip](#using-pip)
+- If you don't know what Poetry is just go with [Pip](#using-pip)
 
 - If you are planing to contribute to this repo please go with [Poetry](#using-poetry)
 
@@ -58,7 +58,7 @@ pip install -r requirements.txt
 python main.py
 ```
 
-### Using [Poetry](https://pipenv.pypa.io/en/latest/installation/#preferred-installation-of-pipenv)
+### Using [Poetry](https://python-poetry.org/)
 
 ```sh
 poetry shell
