@@ -3,7 +3,7 @@
 [![Python application](https://github.com/Naviamold1/Multi-Functional-Discord-Bot/actions/workflows/python-app.yml/badge.svg)](https://github.com/Naviamold1/Multi-Functional-Discord-Bot/actions/workflows/python-app.yml)
 [![Docker Image CI](https://github.com/Naviamold1/Multi-Functional-Discord-Bot/actions/workflows/docker-image.yml/badge.svg)](https://github.com/Naviamold1/Multi-Functional-Discord-Bot/actions/workflows/docker-image.yml)
 [![CodeQL](https://github.com/Naviamold1/Multi-Functional-Discord-Bot/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/Naviamold1/Multi-Functional-Discord-Bot/actions/workflows/github-code-scanning/codeql)
-[![Black coding style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Twitter: naviamold](https://img.shields.io/twitter/follow/naviamold.svg?style=social)](https://twitter.com/naviamold)
 
