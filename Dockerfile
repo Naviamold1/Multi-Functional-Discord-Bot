@@ -2,14 +2,12 @@ FROM python:3-alpine
 
 WORKDIR /usr/src/app
 
-COPY requirements.txt ./
+COPY pyproject.toml poetry.lock ./
 
-RUN python -m pip install --upgrade pip
-
-RUN pip install --no-cache-dir -r requirements.txt
-
-# RUN pip install pipenv && pipenv install --dev --system --deploy
+RUN pip install poetry && poetry install --only main --no-root --no-directory
 
 COPY . .
+
+RUN poetry install --only main
 
 CMD [ "python", "main.py" ]
