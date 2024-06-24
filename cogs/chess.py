@@ -6,6 +6,10 @@ from discord import Interaction, app_commands
 from discord.app_commands import Choice
 from discord.ext import commands
 
+Client.request_config["headers"]["User-Agent"] = (
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36 Edg/126.0.0.0"
+)
+
 
 class Chess(commands.GroupCog, name="chess", description="Command related to chess"):
     def __init__(self, bot: commands.Bot) -> None:
